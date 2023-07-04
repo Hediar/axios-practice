@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import axios from "axios";
+// import axios from "axios";
+import api from "./axios/api";
 
 function App() {
   const [todos, setTodos] = useState(null);
@@ -10,13 +11,13 @@ function App() {
   const [targetId, setTargetId] = useState("");
   const [contents, setContents] = useState("");
   const fetchTodos = async () => {
-    const { data } = await axios.get("http://localhost:4000/todos");
-    console.log(data);
+    const { data } = await api.get("/todos");
+    // console.log(data);
     setTodos(data);
   };
   // 추가
   const onSubmitHandler = async (newTodo) => {
-    axios.post("http://localhost:4000/todos", inputValue);
+    api.post("/todos", inputValue);
     // setTodos([...todos, inputValue]); // 렌더링을 위해
     // 추가하면 id를 읽어오지 못하고 있다.
     fetchTodos(); // db 갱신
@@ -24,7 +25,7 @@ function App() {
 
   // 삭제
   const onDeleteButtonClickHandler = async (id) => {
-    axios.delete(`http://localhost:4000/todos/${id}`);
+    api.delete(`/todos/${id}`);
     setTodos(
       todos.filter((item) => {
         return item.id !== id;
@@ -34,7 +35,7 @@ function App() {
 
   // 수정
   const onUpdateButtonClickHandler = async () => {
-    axios.patch(`http://localhost:4000/todos/${targetId}`, {
+    api.patch(`/todos/${targetId}`, {
       title: contents,
     });
     setTodos(
